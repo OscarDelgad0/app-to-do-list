@@ -1,11 +1,18 @@
 import prisma from '@/app/lib/prisma';
 import { NextResponse, NextRequest } from 'next/server'
+import * as yup from 'yup';
 
 interface Segments {
     params: {
         id: string;
     }
 }
+
+const putSchema = yup.object({
+    complete: yup.boolean().optional(),
+    description: yup.string().optional(),
+    prueba: yup.string().optional()
+})
 
 export async function GET(request: Request, {params}: Segments) { 
 
@@ -27,10 +34,19 @@ export async function PUT(request: Request, {params}: Segments) {
         return NextResponse.json({message: `Todo con id ${ id } no existe`}, {status: 404})
     } 
 
-    const updatedTodo = await prisma.todo.update( {
-        where: {id},
-        data: {}
-    })
+    try {
+        const {complete, description, prueba} = await putSchema.validate(request.json());
+    
+        const updatedTodo = await prisma.todo.update( {
+            where: {id},
+            data: { complete, description, prueba }
+        })
 
-    return NextResponse.json(todo)
+        return NextResponse.json(updatedTodo)
+        
+    }catch(error) {
+        return NextResponse.json(error, {status: 400})
+    }
+
+
 }
