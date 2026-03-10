@@ -63,3 +63,7 @@ export default function Home() {
     </div>
   );
 }
+<section>
+  <div></div>
+  <div></div>
+</section>
