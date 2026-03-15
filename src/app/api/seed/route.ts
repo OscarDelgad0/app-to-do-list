@@ -1,22 +1,19 @@
-import prisma from '@/app/lib/prisma'
-import { NextResponse, NextRequest } from 'next/server'
+import prisma from "@/app/lib/prisma";
+import { NextResponse, NextRequest } from "next/server";
 
+export async function GET(request: Request) {
+  await prisma.todo.deleteMany();
 
-export async function GET(request: Request) { 
-
-    await prisma.todo.deleteMany();
-
-    await prisma.todo.createMany({
-        data: [
-            {description: 'Piedra del alma', prueba: 'prueba-1'},
-            {description: 'Piedra del poder', prueba: 'prueba-1'},
-            {description: 'Piedra del tiempo', prueba: 'prueba-1'},
-            {description: 'Piedra del realidad', prueba: 'prueba-1'},
-        ]
-    })
-
+  await prisma.todo.createMany({
+    data: [
+      { description: "Piedra del alma" },
+      { description: "Piedra del poder" },
+      { description: "Piedra del tiempo" },
+      { description: "Piedra del realidad" },
+    ],
+  });
 
   return NextResponse.json({
-    message: 'Seed executed',
-  })
+    message: "Seed executed",
+  });
 }
